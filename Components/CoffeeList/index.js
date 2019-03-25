@@ -9,14 +9,20 @@ import coffeeshops from "./list";
 // Component
 import CoffeeItem from "./CoffeeItem";
 
+import { connect } from "react-redux";
+
 class CoffeeList extends Component {
   render() {
+    const { coffeeShops, loading } = this.props.coffeeReducer;
     let shops;
-    if (coffeeshops) {
-      shops = coffeeshops.map(coffeeShop => (
-        <CoffeeItem coffeeShop={coffeeShop} key={coffeeShop.id} />
-      ));
+
+    if (loading) {
+      return <Spinner />;
     }
+
+    shops = coffeeShops.map(coffeeShop => (
+      <CoffeeItem coffeeShop={coffeeShop} key={coffeeShop.id} />
+    ));
     return (
       <Content>
         <List>{shops}</List>
@@ -25,4 +31,7 @@ class CoffeeList extends Component {
   }
 }
 
-export default CoffeeList;
+const mapStateToProps = state => ({
+  coffeeReducer: state.coffeeReducer
+});
+export default connect(mapStateToProps)(CoffeeList);
